@@ -38,19 +38,19 @@ function projectPoint(x, y) {
 // It's just a piece of code I've copied from the web. Like here, for example:
 
 //http://bl.ocks.org/eesur/4e0a69d57d3bfc8a82c2
-d3.selection.prototype.moveToFront = function() {  
-  return this.each(function(){
-    this.parentNode.appendChild(this);
-  });
-};
-d3.selection.prototype.moveToBack = function() {  
-    return this.each(function() { 
-        var firstChild = this.parentNode.firstChild; 
-        if (firstChild) { 
-            this.parentNode.insertBefore(this, firstChild); 
-        } 
-    });
-};
+// d3.selection.prototype.moveToFront = function() {  
+//   return this.each(function(){
+//     this.parentNode.appendChild(this);
+//   });
+// };
+// d3.selection.prototype.moveToBack = function() {  
+//     return this.each(function() { 
+//         var firstChild = this.parentNode.firstChild; 
+//         if (firstChild) { 
+//             this.parentNode.insertBefore(this, firstChild); 
+//         } 
+//     });
+// };
 
 
 
@@ -60,7 +60,7 @@ d3.selection.prototype.moveToBack = function() {
 $(document).ready(function(d) {
     
 
-    d3.csv("data/mo_poverty.csv", function(data) {
+    d3.csv("data/data.csv", function(data) {
 
 
         // Each row in the data is a county.
@@ -79,12 +79,22 @@ $(document).ready(function(d) {
         $.each(data, function(i, item) {
             var fips = item["State FIPS Code"]+item["County FIPS Code"];
             theData[fips] = item;
+
+            var lat = item["LATITUDE"];
+            var lon = item["LONGITUDE"];
+
+            L.marker([lat,lon]).addTo(map);
+
         }) 
 
         drawMap();
     })
 });
 
+map.on('click', function(e) {
+    var facilityName = theData[lat, lon]["FACILITY_NAME"];
+    var totalReleases = theData[lat, lon]["TOTAL_RELEASES"]+"pounds";
+});
 
 
 
@@ -114,77 +124,78 @@ function drawMap() {
 
         console.log(feature);
 
-        feature.style("fill", function(d) {
+        // feature.style("fill", function(d) {
 
-            var fips = d.properties.geoid;
-            var povertyLevel = theData[fips]["Poverty Percent, All Ages"];
+        //     var fips = d.properties.geoid;
+        //     var releases = theData["TOTAL_RELEASES"];
 
-            povertyLevel = Number(povertyLevel);
+        //     releases = Number(releases);
 
             // This is where we set our colors. There are many ways to do this.
             // This is probably the simplest.
-            if (povertyLevel <= 10) {
-                return "#ffffb2";
-            } else if (povertyLevel > 10 && povertyLevel <= 20) {
-                return "#fecc5c";
-            } else if (povertyLevel > 20 && povertyLevel <= 30) {
-                return "#fd8d3c";
-            } else if (povertyLevel > 30) {
-                return "#e31a1c";
-            }
+            // if (povertyLevel <= 10) {
+            //     return "#ffffb2";
+            // } else if (povertyLevel > 10 && povertyLevel <= 20) {
+            //     return "#fecc5c";
+            // } else if (povertyLevel > 20 && povertyLevel <= 30) {
+            //     return "#fd8d3c";
+            // } else if (povertyLevel > 30) {
+            //     return "#e31a1c";
+            // }
 
             
-        })
-        .on("mouseover", function(d) {
-            var fips = d.properties.geoid;
-            var countyName = theData[fips]["Name"];
-            var povertyLevel = theData[fips]["Poverty Percent, All Ages"]+"%";
+        // })
+       
+        // .on("mouseover", function(d) {
+        //     var fips = d.properties.geoid;
+        //     var countyName = theData[fips]["Name"];
+        //     var povertyLevel = theData[fips]["Poverty Percent, All Ages"]+"%";
 
-            // Select the county we're moused over.
-            // Give it a black stroke and move it to the front.
-            // (see moveToFront() explanation above)
-            d3.select(this).style("stroke", "#333").moveToFront();
+        //     // Select the county we're moused over.
+        //     // Give it a black stroke and move it to the front.
+        //     // // (see moveToFront() explanation above)
+        //     // d3.select(this).style("stroke", "#333").moveToFront();
 
-            // d3 method for getting mouse relative position
-            // (relative to the parent container (the .chart div in this case))
-            // var x = d3.mouse(this)[0];
-            // var y = d3.mouse(this)[1];
+        //     // d3 method for getting mouse relative position
+        //     // (relative to the parent container (the .chart div in this case))
+        //     // var x = d3.mouse(this)[0];
+        //     // var y = d3.mouse(this)[1];
 
-            // d3 method for getting the mouse's page position
-            // which is the position relative to the top left corner of the whole page.
-            var pageX = d3.event.pageX;
-            var pageY = d3.event.pageY;
+        //     // d3 method for getting the mouse's page position
+        //     // which is the position relative to the top left corner of the whole page.
+        //     var pageX = d3.event.pageX;
+        //     var pageY = d3.event.pageY;
 
-            // jQuery method for getting position of an element
-            // In this case the .chart div.
-            var chartLeft = $(".chart").position().left;
-            var chartTop = $(".chart").position().top;
+        //     // jQuery method for getting position of an element
+        //     // In this case the .chart div.
+        //     var chartLeft = $(".chart").position().left;
+        //     var chartTop = $(".chart").position().top;
 
-            // Subtract the chart positon from the mouse's page position.
-            // This gives us an x/y that will position our tooltip properly within the .chart div 
-            var tt_x = pageX - chartLeft + 15;
-            var tt_y = pageY - chartTop + 15;
+        //     // Subtract the chart positon from the mouse's page position.
+        //     // This gives us an x/y that will position our tooltip properly within the .chart div 
+        //     var tt_x = pageX - chartLeft + 15;
+        //     var tt_y = pageY - chartTop + 15;
 
-            // Add our values to the tooltip as html.
-            // and `show()` it (sets css to dislay: block)
-            $(".tt").html(
-                "<div class='name'>"+countyName+"</div>"+
-                "<div class='val'>"+povertyLevel+"</div>"
-            ).show();
+        //     // Add our values to the tooltip as html.
+        //     // and `show()` it (sets css to dislay: block)
+        //     $(".tt").html(
+        //         "<div class='name'>"+countyName+"</div>"+
+        //         "<div class='val'>"+povertyLevel+"</div>"
+        //     ).show();
             
-            $(".tt").css({
-                    "left" : tt_x+"px",
-                    "top" : tt_y+"px"
-                });
+        //     $(".tt").css({
+        //             "left" : tt_x+"px",
+        //             "top" : tt_y+"px"
+        //         });
 
-        })
-        .on("mouseout", function() {
+        // })
+        // .on("mouseout", function() {
 
-            d3.select(this).style("stroke", "#FFF").moveToBack();
+        //     d3.select(this).style("stroke", "#FFF").moveToBack();
 
-            // `hide()` sets css to dislay: none
-            $(".tt").hide();
-        })
+        //     // `hide()` sets css to dislay: none
+        //     $(".tt").hide();
+        // })
 
 
 
@@ -224,18 +235,5 @@ function drawMap() {
     });
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 

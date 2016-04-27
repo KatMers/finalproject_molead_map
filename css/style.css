@@ -10,8 +10,12 @@
 
 .county {
 	stroke-width: 1;
-	stroke: #FFF;
-	fill: #CCC;
+	stroke: #4d4d4d;
+	fill: none;
+}
+
+L.marker {
+	color: red;
 }
 
 
@@ -39,14 +43,14 @@
 
 
 
-.key {
+/*.key {
 	position: relative;
 	display: inline-block;
 	height: 30px;
 	margin-right: 30px;
-}
+}*/
 
-.key .key-item {
+/*.key .key-item {
 	top: 15px;
 	width: 30px;
 	float: left;
@@ -66,8 +70,8 @@
 	right: -15px;
 	font-size: 11px;
 }
-
-.v0-10 .swatch {
+*/
+/*.v0-10 .swatch {
 	background-color: #ffffb2;
 }
 
@@ -83,7 +87,7 @@
 .v30 .swatch {
 	background-color: #e31a1c;
 }
-
+*/
 
 
 
