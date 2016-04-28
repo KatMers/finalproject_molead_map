@@ -58,6 +58,14 @@ function projectPoint(x, y) {
 
 
 $(document).ready(function(d) {
+    function getData() {
+    
+    $.getJSON("js/polls.json", function(data) {
+        //When we have the data, pass it to the `drawMarkers()` function
+
+        drawMarkers(data);
+    });
+}
     
 
     d3.csv("data/data.csv", function(data) {
@@ -77,8 +85,6 @@ $(document).ready(function(d) {
 
 
         $.each(data, function(i, item) {
-            var fips = item["State FIPS Code"]+item["County FIPS Code"];
-            theData[fips] = item;
 
             var lat = item["LATITUDE"];
             var lon = item["LONGITUDE"];
@@ -91,11 +97,42 @@ $(document).ready(function(d) {
     })
 });
 
-map.on('click', function(e) {
-    var facilityName = theData[lat, lon]["FACILITY_NAME"];
-    var totalReleases = theData[lat, lon]["TOTAL_RELEASES"]+"pounds";
-});
+// map.on('click', function(e) {
+//     var facilityName = theData[lat, lon]["FACILITY_NAME"];
+//     var totalReleases = theData[lat, lon]["TOTAL_RELEASES"]+"pounds";
+// });
 
+function drawMarkers(data) {
+
+    for (i=0; i < data.length; i++) {
+
+        //Define our variables here.
+        var lat = data[i]["LATITUDE"];
+        var lon = data[i]["LONGITUDE"];
+        var placeName = data[i]["FACILITY_NAME"];
+        var amount = data[i]["TOTAL_RELEASES"];
+
+        //Lets store our markup as a variable to keep things nice and tidy.
+        var markup = 
+            "<span class='placeName'>Facility: "+facility+"</span><br>"+
+            "<span class='amount'>"+placeName+"</span><br>";
+
+        //Draw the marker here. Pass the lat/long value unique to each location
+        //and parse the markup to the `bindPopup` method so it shows up when a marker is selected
+        L.marker([lat, lon]).addTo(map)
+            .bindPopup(markup)
+            .openPopup();
+
+        // Alternate marker call uses `myIcon` to draw a different marker.
+        // L.marker([lat, lon], {icon: myIcon}).addTo(map)
+        //  .bindPopup(markup)
+        //  .openPopup();
+
+    }
+
+
+    
+}
 
 
 
