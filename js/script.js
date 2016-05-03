@@ -110,8 +110,10 @@ function drawMarkers(data) {
 
         //Lets store our markup as a variable to keep things nice and tidy.
         var markup = 
-            "<span class='placeName'>Facility: NAME HERE</span><br>"+
-            "<span class='amount'>"+placeName+"</span><br>";
+            "<span class='placeName'>Facility: </span>"+
+            "<span class='placeName'>"+placeName+"</span><br>"+
+            "<span class='amount'>"+amount+"</span>"+
+            "<span class='amount'> Pounds</span>";
 
         //Draw the marker here. Pass the lat/long value unique to each location
         //and parse the markup to the `bindPopup` method so it shows up when a marker is selected
@@ -135,13 +137,13 @@ function drawMarkers(data) {
 function drawMap() {
 
     //Load the Missouri County GeoJson
-    d3.json("js/missouri-counties.json", function(collection) {
+    d3.json("js/missouri.json", function(collection) {
 
         //This positions each county on it's the map.
-        var transform = d3.geo.transform({
-                point: projectPoint
-            }),
-            path = d3.geo.path().projection(transform);
+        // var transform = d3.geo.transform({
+        //         point: projectPoint
+        //     }),
+        //     path = d3.geo.path().projection(transform);
 
         
         //This draws the feature on the map and fills it with data
