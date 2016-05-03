@@ -57,19 +57,13 @@ function projectPoint(x, y) {
 
 
 
-$(document).ready(function(d) {
-    function getData() {
-    
-    $.getJSON("js/polls.json", function(data) {
-        //When we have the data, pass it to the `drawMarkers()` function
 
-        drawMarkers(data);
-    });
-}
     
 
     d3.csv("data/data.csv", function(data) {
 
+
+        drawMarkers(data)
 
         // Each row in the data is a county.
         // So we append an object to theData with the county name
@@ -84,18 +78,19 @@ $(document).ready(function(d) {
         // }
 
 
-        $.each(data, function(i, item) {
+        // $.each(data, function(i, item) {
 
-            var lat = item["LATITUDE"];
-            var lon = item["LONGITUDE"];
+        //     var lat = item["LATITUDE"];
+        //     var lon = item["LONGITUDE"];
 
-            L.marker([lat,lon]).addTo(map);
+        //     L.marker([lat,lon]).addTo(map);
 
-        }) 
+        // }) 
 
-        drawMap();
+        //drawMap();
+
     })
-});
+
 
 // map.on('click', function(e) {
 //     var facilityName = theData[lat, lon]["FACILITY_NAME"];
@@ -103,6 +98,7 @@ $(document).ready(function(d) {
 // });
 
 function drawMarkers(data) {
+
 
     for (i=0; i < data.length; i++) {
 
@@ -114,14 +110,14 @@ function drawMarkers(data) {
 
         //Lets store our markup as a variable to keep things nice and tidy.
         var markup = 
-            "<span class='placeName'>Facility: "+facility+"</span><br>"+
+            "<span class='placeName'>Facility: NAME HERE</span><br>"+
             "<span class='amount'>"+placeName+"</span><br>";
 
         //Draw the marker here. Pass the lat/long value unique to each location
         //and parse the markup to the `bindPopup` method so it shows up when a marker is selected
-        L.marker([lat, lon]).addTo(map)
-            .bindPopup(markup)
-            .openPopup();
+          L.marker([lat, lon]).addTo(map)
+         .bindPopup(markup)
+         .openPopup();
 
         // Alternate marker call uses `myIcon` to draw a different marker.
         // L.marker([lat, lon], {icon: myIcon}).addTo(map)
