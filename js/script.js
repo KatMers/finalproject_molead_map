@@ -17,6 +17,24 @@ var svg = d3.select(map.getPanes().overlayPane).append("svg"),
     g = svg.append("g").attr("class", "leaflet-zoom-hide");
 
 
+// var LeafIcon = L.Icon.extend({
+//     options: {
+//         shadowUrl: 'leaf-shadow.png',
+//         iconSize:     [38, 95],
+//         shadowSize:   [50, 64],
+//         iconAnchor:   [22, 94],
+//         shadowAnchor: [4, 62],
+//         popupAnchor:  [-3, -76]
+//     }
+// });
+
+
+// var darkestIcon = new circleIcon({iconUrl: 'markers/darkest.png'}),
+//     2darkestIcon = new circleIcon({iconUrl: 'markers/2darkest.png'}),
+//     2lightestIcon = new circleIcon({iconUrl: 'markers/2lightest.png'}),
+//     lightestIcon = new circleIcon({iconUrl: 'markers/lightest.png'};
+
+
 //This will be a dictionary object we use to lookup the info for each county.
 //It's empty for now. We add our data when we load or json.
 var theData = {};
@@ -29,28 +47,6 @@ function projectPoint(x, y) {
 }
 
 
-// This is some logic to control whether elements appear in front of or behind other elements.
-// We'll use this on mouseover to move county shapes to the front
-// And then to the back when we mouseout. The effect is to get crisp borders all the way around.
-// See it in action in the county mouseover below. It's called by adding `.moveToFront()` to a selection.
-// I don't know why, but this functionality isn't included in the d3 code base.
-// I almost always include this function with my d3 projects.
-// It's just a piece of code I've copied from the web. Like here, for example:
-
-//http://bl.ocks.org/eesur/4e0a69d57d3bfc8a82c2
-// d3.selection.prototype.moveToFront = function() {  
-//   return this.each(function(){
-//     this.parentNode.appendChild(this);
-//   });
-// };
-// d3.selection.prototype.moveToBack = function() {  
-//     return this.each(function() { 
-//         var firstChild = this.parentNode.firstChild; 
-//         if (firstChild) { 
-//             this.parentNode.insertBefore(this, firstChild); 
-//         } 
-//     });
-// };
 
 
 
@@ -60,10 +56,11 @@ function projectPoint(x, y) {
 
     
 
-    d3.csv("data/data.csv", function(data) {
+    d3.csv("data/new_data.csv", function(data) {
 
 
         drawMarkers(data)
+
 
         // Each row in the data is a county.
         // So we append an object to theData with the county name
@@ -107,13 +104,18 @@ function drawMarkers(data) {
         var lon = data[i]["LONGITUDE"];
         var placeName = data[i]["FACILITY_NAME"];
         var amount = data[i]["TOTAL_RELEASES"];
+        var parent = data[i]["PARENT_COMPANY_NAME"];
+        var address = data[i]["STREET_ADDRESS"];
 
         //Lets store our markup as a variable to keep things nice and tidy.
         var markup = 
-            "<span class='placeName'>Facility: </span>"+
-            "<span class='placeName'>"+placeName+"</span><br>"+
+            
             "<span class='amount'>"+amount+"</span>"+
-            "<span class='amount'> Pounds</span>";
+            "<span class='amount'> Pounds of Lead</span><br>"+
+            "<span class='placeName'>"+placeName+"</span><br>"+
+            "<span class='address'>"+address+"</span><br>"+
+            "<span class='parent'>Owned by </span>"+
+            "<span class='parent'>"+parent+"</span>";
 
         //Draw the marker here. Pass the lat/long value unique to each location
         //and parse the markup to the `bindPopup` method so it shows up when a marker is selected
@@ -121,10 +123,14 @@ function drawMarkers(data) {
          .bindPopup(markup)
          .openPopup();
 
+
         // Alternate marker call uses `myIcon` to draw a different marker.
         // L.marker([lat, lon], {icon: myIcon}).addTo(map)
         //  .bindPopup(markup)
         //  .openPopup();
+
+
+        // Color the markers by (4 colors maybe) by amount released.
 
     }
 
@@ -180,58 +186,6 @@ function drawMap() {
 
             
         // })
-       
-        // .on("mouseover", function(d) {
-        //     var fips = d.properties.geoid;
-        //     var countyName = theData[fips]["Name"];
-        //     var povertyLevel = theData[fips]["Poverty Percent, All Ages"]+"%";
-
-        //     // Select the county we're moused over.
-        //     // Give it a black stroke and move it to the front.
-        //     // // (see moveToFront() explanation above)
-        //     // d3.select(this).style("stroke", "#333").moveToFront();
-
-        //     // d3 method for getting mouse relative position
-        //     // (relative to the parent container (the .chart div in this case))
-        //     // var x = d3.mouse(this)[0];
-        //     // var y = d3.mouse(this)[1];
-
-        //     // d3 method for getting the mouse's page position
-        //     // which is the position relative to the top left corner of the whole page.
-        //     var pageX = d3.event.pageX;
-        //     var pageY = d3.event.pageY;
-
-        //     // jQuery method for getting position of an element
-        //     // In this case the .chart div.
-        //     var chartLeft = $(".chart").position().left;
-        //     var chartTop = $(".chart").position().top;
-
-        //     // Subtract the chart positon from the mouse's page position.
-        //     // This gives us an x/y that will position our tooltip properly within the .chart div 
-        //     var tt_x = pageX - chartLeft + 15;
-        //     var tt_y = pageY - chartTop + 15;
-
-        //     // Add our values to the tooltip as html.
-        //     // and `show()` it (sets css to dislay: block)
-        //     $(".tt").html(
-        //         "<div class='name'>"+countyName+"</div>"+
-        //         "<div class='val'>"+povertyLevel+"</div>"
-        //     ).show();
-            
-        //     $(".tt").css({
-        //             "left" : tt_x+"px",
-        //             "top" : tt_y+"px"
-        //         });
-
-        // })
-        // .on("mouseout", function() {
-
-        //     d3.select(this).style("stroke", "#FFF").moveToBack();
-
-        //     // `hide()` sets css to dislay: none
-        //     $(".tt").hide();
-        // })
-
 
 
 
