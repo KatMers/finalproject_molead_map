@@ -75,17 +75,6 @@ function projectPoint(x, y) {
         // }
 
 
-        // $.each(data, function(i, item) {
-
-        //     var lat = item["LATITUDE"];
-        //     var lon = item["LONGITUDE"];
-
-        //     L.marker([lat,lon]).addTo(map);
-
-        // }) 
-
-        //drawMap();
-
     })
 
 
@@ -142,14 +131,8 @@ function drawMarkers(data) {
 
 function drawMap() {
 
-    //Load the Missouri County GeoJson
+    //Load the Missouri GeoJson
     d3.json("js/missouri.json", function(collection) {
-
-        //This positions each county on it's the map.
-        // var transform = d3.geo.transform({
-        //         point: projectPoint
-        //     }),
-        //     path = d3.geo.path().projection(transform);
 
         
         //This draws the feature on the map and fills it with data
@@ -161,28 +144,28 @@ function drawMap() {
             .data(collection.features)
             .enter()
             .append("path")
-            .attr("class", "county");
+         
 
         console.log(feature);
 
         // feature.style("fill", function(d) {
 
         //     var fips = d.properties.geoid;
-        //     var releases = theData["TOTAL_RELEASES"];
+        //     var amount = theData["TOTAL_RELEASES"];
 
-        //     releases = Number(releases);
+        //     amount = Number(amount);
 
-            // This is where we set our colors. There are many ways to do this.
-            // This is probably the simplest.
-            // if (povertyLevel <= 10) {
-            //     return "#ffffb2";
-            // } else if (povertyLevel > 10 && povertyLevel <= 20) {
-            //     return "#fecc5c";
-            // } else if (povertyLevel > 20 && povertyLevel <= 30) {
-            //     return "#fd8d3c";
-            // } else if (povertyLevel > 30) {
-            //     return "#e31a1c";
-            // }
+        //     // This is where we set our colors. There are many ways to do this.
+        //     // This is probably the simplest.
+        //     if (amount <= 10) {
+        //         return "#ffffb2";
+        //     } else if (amount > 10 && amount <= 50) {
+        //         return "#fecc5c";
+        //     } else if (amount> 50 && amount <= 100) {
+        //         return "#fd8d3c";
+        //     } else if (amount > 100) {
+        //         return "#e31a1c";
+        //     }
 
             
         // })
